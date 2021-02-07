@@ -97,16 +97,8 @@ public class PlayerManager : NetworkBehaviour
     {
         dropZoneName = whichDropzone.name;
         if(whichDropzone.name == "PDropZone1" && Besetzt[0] == false)
-        {
-            if(!isPlayerTurn)
-            {
-            dropZoneSuchen = 0;
-            }
-            else
-            {
-                dropZoneSuchen = 1;
-            }
-
+        {                        
+            dropZoneSuchen = 1;
             Besetzt[0] = true;
            
         }
