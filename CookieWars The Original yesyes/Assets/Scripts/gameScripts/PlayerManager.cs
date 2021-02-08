@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.UI;
 
 public class PlayerManager : NetworkBehaviour
 
@@ -21,6 +22,8 @@ public class PlayerManager : NetworkBehaviour
     
     //Card Variables
     private List<GameObject> Cards = new List<GameObject>();
+    public GameObject ZugText;
+    private Text text;
     
     //Gamelogic Variables
     public bool isPlayerTurn = false;
@@ -33,7 +36,9 @@ public class PlayerManager : NetworkBehaviour
     [Command]
     public void CmdchangeTurn()
     {
+        
         RpcChangeTurn();
+
     }
     [ClientRpc]
     public void RpcChangeTurn()
@@ -41,6 +46,17 @@ public class PlayerManager : NetworkBehaviour
         PlayerManager Player = NetworkClient.connection.identity.GetComponent<PlayerManager>();
         
         Player.isPlayerTurn = !Player.isPlayerTurn;
+        
+        if(isPlayerTurn)
+        {
+            text.text = "Du bist am Zug.";
+        }
+        else
+        {
+            text.text = "Du bist nicht am Zug";
+        }
+        
+
     }
     public void setPlayerTurn()
     {
@@ -60,6 +76,7 @@ public class PlayerManager : NetworkBehaviour
         DropZoneE.Add(GameObject.Find("EDropZone1"));
         DropZoneE.Add(GameObject.Find("EDropZone2"));
         DropZoneE.Add(GameObject.Find("EDropZone3"));
+        ZugText = GameObject.Find("ZugText");
 
 
         
@@ -98,7 +115,7 @@ public class PlayerManager : NetworkBehaviour
         dropZoneName = whichDropzone.name;
         if(whichDropzone.name == "PDropZone1" && Besetzt[0] == false)
         {                        
-            dropZoneSuchen = 1;
+            dropZoneSuchen = 0;
             Besetzt[0] = true;
            
         }

@@ -3,7 +3,13 @@ guid: c0becef9ff9bd3d449e75eba2f2ea922
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - card: {instanceID: 0}
+  - PlayerHand: {instanceID: 0}
+  - EnemyHand: {instanceID: 0}
+  - endTurnButton: {instanceID: 0}
+  - ZugText: {fileID: 1090824624667314167, guid: 147677a6a11a4af49b22185b045b5769,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
