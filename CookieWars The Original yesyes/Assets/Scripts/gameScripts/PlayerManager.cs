@@ -195,7 +195,9 @@ public class PlayerManager : NetworkBehaviour
             {
                if (!Return) 
                {
-                   card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                  
+                    PlayerManager Huso = NetworkClient.connection.identity.GetComponent<PlayerManager>();
+                    card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                           
+                    Huso.Operationen -= Huso.CardCost;                   
                }
                else 
                {

@@ -52,15 +52,12 @@ public class DragDrop : NetworkBehaviour
 
 
         if(isOverDropZone && PlayerManager.isPlayerTurn && PlayerManager.Operationen >= PlayerManager.CardCost)
-        {
-               
-            PlayerManager.Operationen -= PlayerManager.CardCost;
-            PlayerManager.updateOperationenDisplay();
-            
+        {            
             PlayerManager.SearchDropZone(DropZone);
             
             isDraggable = false;
-            PlayerManager.PlayCard(gameObject);     
+            PlayerManager.PlayCard(gameObject);
+            PlayerManager.updateOperationenDisplay();    
         }
         else
         {
