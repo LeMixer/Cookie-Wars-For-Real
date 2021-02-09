@@ -18,15 +18,8 @@ public class endTurn : NetworkBehaviour
         
         NetworkIdentity networkIdentity = NetworkClient.connection.identity;
         PlayerManager = networkIdentity.GetComponent<PlayerManager>();
-        
-        
-        PlayerManager.ChangeTurn();
-        if(!hasAuthority)
-        {
-            PlayerManager.setPlayerTurn();
-        }
-
-        
+               
+        PlayerManager.ChangeTurn();       
     }
     public void Spawnbutton()
     {

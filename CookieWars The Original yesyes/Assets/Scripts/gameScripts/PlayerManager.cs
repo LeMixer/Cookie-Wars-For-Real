@@ -22,8 +22,6 @@ public class PlayerManager : NetworkBehaviour
     
     //Card Variables
     private List<GameObject> Cards = new List<GameObject>();
-    public GameObject ZugText;
-    private Text text;
     
     //Gamelogic Variables
     public bool isPlayerTurn = false;
@@ -31,6 +29,7 @@ public class PlayerManager : NetworkBehaviour
     
     public void ChangeTurn()
     {
+        if(!isPlayerTurn) return;
         CmdchangeTurn();
     }
     [Command]
@@ -46,21 +45,6 @@ public class PlayerManager : NetworkBehaviour
         PlayerManager Player = NetworkClient.connection.identity.GetComponent<PlayerManager>();
         
         Player.isPlayerTurn = !Player.isPlayerTurn;
-        
-        if(isPlayerTurn)
-        {
-            text.text = "Du bist am Zug.";
-        }
-        else
-        {
-            text.text = "Du bist nicht am Zug";
-        }
-        
-
-    }
-    public void setPlayerTurn()
-    {
-        isPlayerTurn = true;
     }
 
 
@@ -76,7 +60,6 @@ public class PlayerManager : NetworkBehaviour
         DropZoneE.Add(GameObject.Find("EDropZone1"));
         DropZoneE.Add(GameObject.Find("EDropZone2"));
         DropZoneE.Add(GameObject.Find("EDropZone3"));
-        ZugText = GameObject.Find("ZugText");
 
 
         
@@ -113,19 +96,19 @@ public class PlayerManager : NetworkBehaviour
     public void RpcSearchDropzone(GameObject whichDropzone)
     {
         dropZoneName = whichDropzone.name;
-        if(whichDropzone.name == "PDropZone1" && Besetzt[0] == false)
+        if(whichDropzone.name == "PDropZone1" && !Besetzt[0])
         {                        
             dropZoneSuchen = 0;
             Besetzt[0] = true;
            
         }
-        else if(whichDropzone.name == "PDropZone2" && Besetzt[1] == false)
+        else if(whichDropzone.name == "PDropZone2" && !Besetzt[1])
         {
             dropZoneSuchen = 1;
             Besetzt[1] = true;
             
         }
-        else if(whichDropzone.name == "PDropZone3" && Besetzt[2] == false)
+        else if(whichDropzone.name == "PDropZone3" && !Besetzt[2])
         {
             dropZoneSuchen = 2;
             Besetzt[2] = true;

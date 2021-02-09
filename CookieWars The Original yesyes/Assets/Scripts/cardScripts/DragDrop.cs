@@ -48,11 +48,10 @@ public class DragDrop : NetworkBehaviour
         if(!isDraggable) return;
 
         isDragging = false;
-        if(isOverDropZone)
-        { 
-            NetworkIdentity networkIdentity =NetworkClient.connection.identity;
-            PlayerManager = networkIdentity.GetComponent<PlayerManager>();
-            
+            NetworkIdentity etworkIdentity =NetworkClient.connection.identity;
+            PlayerManager = etworkIdentity.GetComponent<PlayerManager>();
+        if(isOverDropZone && PlayerManager.isPlayerTurn)
+        {   
             PlayerManager.SearchDropZone(DropZone);
             
             isDraggable = false;
