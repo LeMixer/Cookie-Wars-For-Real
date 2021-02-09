@@ -19,7 +19,12 @@ public class PlayerManager : NetworkBehaviour
     public string dropZoneName;
     public bool Return = false;
     public GameObject endTurnButton;
+    
+    //operationen
     public int Operationen = 0;
+    
+    public GameObject OperationenAnzeige;
+    
     
     //Card Variables
     private List<GameObject> Cards = new List<GameObject>();
@@ -49,6 +54,8 @@ public class PlayerManager : NetworkBehaviour
         if(Player.isPlayerTurn)
         {
             Player.Operationen += 4;
+            updateOperationenDisplay();
+            
         }
     }
 
@@ -57,8 +64,9 @@ public class PlayerManager : NetworkBehaviour
     {
         base.OnStartClient();
 
-        
-        
+        OperationenAnzeige = GameObject.Find("OperationenAnzeige1");    
+
+
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
         DropZoneP.Add(GameObject.Find("PDropZone1"));
@@ -75,11 +83,12 @@ public class PlayerManager : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
 
+        
         if(isClientOnly)
         {
             isPlayerTurn = true;
             Operationen =4;
-            
+            updateOperationenDisplay(); 
         }
         
   
@@ -217,7 +226,31 @@ public class PlayerManager : NetworkBehaviour
     }
     void Update()
     {
-        
+
     }
+
+    //befehlskette Operationen Display
+    public void updateOperationenDisplay()
+    {
+        CmdUpdateOperationenDisplay();
+    }
+    [Command]
+    private void CmdUpdateOperationenDisplay()
+    {
+        RpcupdateOperationenDisplay();
+    } 
+    [ClientRpc]
+    public void RpcupdateOperationenDisplay()
+    {   
+        PlayerManager ODisplay= NetworkClient.connection.identity.GetComponent<PlayerManager>();
+        Text OperationenText = OperationenAnzeige.GetComponent<Text>();
+        OperationenText.text = ODisplay.Operationen.ToString();    
+    }
+
+    
+    
+        
+    
   
 }
+

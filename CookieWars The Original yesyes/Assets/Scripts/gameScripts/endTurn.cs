@@ -20,6 +20,7 @@ public class endTurn : NetworkBehaviour
         PlayerManager = networkIdentity.GetComponent<PlayerManager>();
                
         PlayerManager.ChangeTurn();
+        if(!hasAuthority) PlayerManager.updateOperationenDisplay(); 
                
     }
     public void Spawnbutton()

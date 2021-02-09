@@ -53,9 +53,9 @@ public class DragDrop : NetworkBehaviour
 
         if(isOverDropZone && PlayerManager.isPlayerTurn && PlayerManager.Operationen >= PlayerManager.CardCost)
         {
-            Debug.Log(PlayerManager.Operationen);   
+               
             PlayerManager.Operationen -= PlayerManager.CardCost;
-            Debug.Log(PlayerManager.Operationen);
+            PlayerManager.updateOperationenDisplay();
             
             PlayerManager.SearchDropZone(DropZone);
             

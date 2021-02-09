@@ -92,4 +92,9 @@ MonoBehaviour:
   Return: 0
   endTurnButton: {fileID: 6393406906069633567, guid: 354796ba3a19d404789bf84096c36451,
     type: 3}
+  Operationen: 0
+  OperationenAnzeigePrefab: {fileID: 4532123187937270403, guid: af5e6c4d532d8524faaacd13ad33b901,
+    type: 3}
   isPlayerTurn: 0
+  KartenZiehAnzahl: 1
+  CardCost: 1
