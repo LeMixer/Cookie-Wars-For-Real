@@ -14,7 +14,9 @@ public class KarteZiehen : NetworkBehaviour
         PlayerManager = networkIdentity.GetComponent<PlayerManager>();
         
         if(!PlayerManager.isPlayerTurn) return;
-        PlayerManager.CmdDealCards(); 
+        if(PlayerManager.Operationen<=0) return;
+        PlayerManager.Operationen--; 
+        PlayerManager.CmdDealCards();
         
 
     }

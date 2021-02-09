@@ -48,7 +48,7 @@ public class PlayerManager : NetworkBehaviour
         Player.isPlayerTurn = !Player.isPlayerTurn;
         if(Player.isPlayerTurn)
         {
-            Operationen += 4;
+            Player.Operationen += 4;
         }
     }
 
@@ -56,8 +56,9 @@ public class PlayerManager : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        Operationen = 4;
 
+        
+        
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
         DropZoneP.Add(GameObject.Find("PDropZone1"));
@@ -77,6 +78,8 @@ public class PlayerManager : NetworkBehaviour
         if(isClientOnly)
         {
             isPlayerTurn = true;
+            Operationen =4;
+            
         }
         
   
@@ -90,6 +93,7 @@ public class PlayerManager : NetworkBehaviour
     public void SearchDropZone(GameObject whichDropzone)
     {        
         CmdSearchCard(whichDropzone);
+
     }
     
     [Command]
@@ -101,6 +105,7 @@ public class PlayerManager : NetworkBehaviour
         [ClientRpc]
     public void RpcSearchDropzone(GameObject whichDropzone)
     {
+
         dropZoneName = whichDropzone.name;
         if(whichDropzone.name == "PDropZone1" && !Besetzt[0])
         {                        
@@ -139,20 +144,13 @@ public class PlayerManager : NetworkBehaviour
     [Command]
     public void CmdDealCards()
     {
-        if (Operationen > 0)
-        {       
+        
             for (int i = 0; i < KartenZiehAnzahl; i++)
             {
                 GameObject Card = Instantiate(Cards[0], new Vector2(0,0), Quaternion.identity);
                 NetworkServer.Spawn(Card, connectionToClient);
-                RpcShowCard(Card, "Dealt");
-                Operationen--;
+                RpcShowCard(Card, "Dealt");               
             }
-        }
-        else
-        {
-            Debug.Log("Du hast keine Operationen mehr!!!");
-        }
 
 
     }
