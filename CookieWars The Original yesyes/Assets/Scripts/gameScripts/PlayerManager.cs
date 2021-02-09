@@ -19,6 +19,7 @@ public class PlayerManager : NetworkBehaviour
     public string dropZoneName;
     public bool Return = false;
     public GameObject endTurnButton;
+    public int Operationen = 0;
     
     //Card Variables
     private List<GameObject> Cards = new List<GameObject>();
@@ -45,12 +46,17 @@ public class PlayerManager : NetworkBehaviour
         PlayerManager Player = NetworkClient.connection.identity.GetComponent<PlayerManager>();
         
         Player.isPlayerTurn = !Player.isPlayerTurn;
+        if(Player.isPlayerTurn)
+        {
+            Operationen += 4;
+        }
     }
 
 
     public override void OnStartClient()
     {
         base.OnStartClient();
+        Operationen = 4;
 
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
@@ -128,24 +134,32 @@ public class PlayerManager : NetworkBehaviour
         
     }
     
-    //KartenZiehen button;      
+    //KartenZiehen button; 
+    public int KartenZiehAnzahl = 1;     
     [Command]
     public void CmdDealCards()
     {
-
-        for (int i = 0; i < 3; i++)
+        if (Operationen > 0)
+        {       
+            for (int i = 0; i < KartenZiehAnzahl; i++)
+            {
+                GameObject Card = Instantiate(Cards[0], new Vector2(0,0), Quaternion.identity);
+                NetworkServer.Spawn(Card, connectionToClient);
+                RpcShowCard(Card, "Dealt");
+                Operationen--;
+            }
+        }
+        else
         {
-        GameObject Card = Instantiate(Cards[0], new Vector2(0,0), Quaternion.identity);
-        NetworkServer.Spawn(Card, connectionToClient);
-        RpcShowCard(Card, "Dealt");
+            Debug.Log("Du hast keine Operationen mehr!!!");
         }
 
+
     }
-    
+    public int CardCost = 1;   
     public void PlayCard(GameObject card)
     {
-        CmdPlayCard(card);
-             
+        CmdPlayCard(card);             
     }
     [Command]
     void CmdPlayCard(GameObject card)

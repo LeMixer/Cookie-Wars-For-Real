@@ -13,6 +13,7 @@ public class KarteZiehen : NetworkBehaviour
         NetworkIdentity networkIdentity = NetworkClient.connection.identity;
         PlayerManager = networkIdentity.GetComponent<PlayerManager>();
         
+        if(!PlayerManager.isPlayerTurn) return;
         PlayerManager.CmdDealCards(); 
         
 
