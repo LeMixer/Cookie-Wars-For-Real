@@ -10,15 +10,23 @@ public class KarteZiehen : NetworkBehaviour
 
     public void OnClick()
     {
-        NetworkIdentity networkIdentity = NetworkClient.connection.identity;
-        PlayerManager = networkIdentity.GetComponent<PlayerManager>();
-        
+        PlayerManager = NetworkClient.connection.identity.GetComponent<PlayerManager>();
+
         if(!PlayerManager.isPlayerTurn) return;
-        if(PlayerManager.Operationen<=0) return;
-        PlayerManager.Operationen--;
+        if(PlayerManager.Operationen<=0) return;   
         PlayerManager.updateOperationenDisplay();
         
-        PlayerManager.CmdDealCards();
+        if(PlayerManager.cardsDealt == PlayerManager.Cards.Count)
+        {
+            Debug.Log("Dein Deck hat keine Karten mehr");
+            return;
+        }
+        else
+        {
+            PlayerManager.CmdDealCards();
+            PlayerManager.Operationen--;
+        }
+        
         
 
     }

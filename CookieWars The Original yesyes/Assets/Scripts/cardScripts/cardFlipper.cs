@@ -5,21 +5,23 @@ using UnityEngine.UI;
 
 public class cardFlipper : MonoBehaviour
 {
-    public Sprite cardFront;
-    public Sprite cardBack;
+    public Image cardBack;
 
     public void flip()
     {
-        Sprite currentSprite = gameObject.GetComponent<Image>().sprite; 
+        var tempColor = cardBack.GetComponent<Image>().color;
 
-        if (currentSprite == cardFront)
+        if(tempColor.a == 1f) 
         {
-            gameObject.GetComponent<Image>().sprite = cardBack;
+            tempColor.a = 0f;
+            
         }
         else
         {
-            gameObject.GetComponent<Image>().sprite = cardFront;
+            tempColor.a = 1f;
         }
+        cardBack.color = tempColor;
     }
+        
     
 }

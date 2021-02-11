@@ -7,14 +7,9 @@ using UnityEngine.UI;
 public class PlayerManager : NetworkBehaviour
 
 {
-    public GameObject DoppelKing;
-    public GameObject Kenedim;
-    public GameObject PrincessRolle;
-    public GameObject ESlime;
-    public GameObject Elektriker;
-    public GameObject WaherFox;
-    public GameObject Ratava;
-
+    //Karten
+    public GameObject Kenedim, PrincessRolle,DoppelKing,Ratava,WaherFox,ESlime,Elektriker;
+    
     //DragDrop Variables
     public GameObject PlayerHand;
     public GameObject EnemyHand;
@@ -25,28 +20,23 @@ public class PlayerManager : NetworkBehaviour
     public string dropZoneName;
     public bool Return = false;
     public GameObject endTurnButton;
+    
+    //operationen
     public int Operationen = 0;
+    
     public GameObject OperationenAnzeige;
     
+    
     //Card Variables
-    private List<GameObject> Cards = new List<GameObject>();
+    public List<GameObject> Cards = new List<GameObject>();
     
     //Gamelogic Variables
     public bool isPlayerTurn = false;
-
-    //KartenDeck wird festgelegt und gemischt;
-    [Server]
-    public override void OnStartServer()
-    {
-        Cards.Add(Kenedim);
-        Cards.Add(PrincessRolle);
-        Cards.Add(DoppelKing);
-        Cards.Add(Ratava);
-        Cards.Add(WaherFox);
-        Cards.Add(ESlime);
-        Cards.Add(Elektriker);  
-    }
+    public int cardsDealt;
     
+    //KartenDeck wird festgelegt und gemischt;
+    
+    /// fucking Bastard:       public override void OnStartServer()      ///
     
     
     public void ChangeTurn()
@@ -64,15 +54,14 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     public void RpcChangeTurn()
     {
-        PlayerManager Player = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-        
+        PlayerManager Player = NetworkClient.connection.identity.GetComponent<PlayerManager>(); 
         Player.isPlayerTurn = !Player.isPlayerTurn;
         if(Player.isPlayerTurn)
         {
             Player.Operationen += 4;
             updateOperationenDisplay();
+            
         }
-        
     }
 
 
@@ -80,8 +69,8 @@ public class PlayerManager : NetworkBehaviour
     {
         base.OnStartClient();
 
-        OperationenAnzeige = GameObject.Find("OperationenAnzeige1");
-        
+        OperationenAnzeige = GameObject.Find("OperationenAnzeige1");    
+
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
         DropZoneP.Add(GameObject.Find("PDropZone1"));
@@ -90,24 +79,36 @@ public class PlayerManager : NetworkBehaviour
         DropZoneE.Add(GameObject.Find("EDropZone1"));
         DropZoneE.Add(GameObject.Find("EDropZone2"));
         DropZoneE.Add(GameObject.Find("EDropZone3"));
-    
+        Cards.Add(Kenedim);
+        Cards.Add(PrincessRolle);
+        Cards.Add(DoppelKing);
+        Cards.Add(Ratava);
+        Cards.Add(WaherFox);
+        Cards.Add(ESlime);
+        Cards.Add(Elektriker);    
+          
+
+        Shuffle(Cards);
+
+
+         
+        
     }
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        
-        Shuffle(Cards);
+
         
         if(isClientOnly)
         {
             isPlayerTurn = true;
             Operationen =4;
-            updateOperationenDisplay();
-            
+            updateOperationenDisplay(); 
         }
-        
-  
     }
+
+
+    //DragDrop Kette Search DropZone
     
     
     //DragDrop Kette Search DropZone
@@ -151,18 +152,6 @@ public class PlayerManager : NetworkBehaviour
             Return = true;
         }
     }
-    public static void Shuffle<T>(List<T> TS)
-    {
-        var count = TS.Count;
-        var last = count-1;
-        for (var i = 0; i < last; i++)
-        {
-            var R = UnityEngine.Random.Range(i,count);
-            var tmp = TS[i];
-            TS[i] = TS[R];
-            TS[R] = tmp;
-        }
-    }
     
     //KartenZiehen button; 
     public int KartenZiehAnzahl = 1;     
@@ -170,14 +159,15 @@ public class PlayerManager : NetworkBehaviour
     public void CmdDealCards()
     {
         
-            for (int i = 0; i < KartenZiehAnzahl; i++)
-            {
-                GameObject Card = Instantiate(Cards[0], new Vector2(0,0), Quaternion.identity);
-                NetworkServer.Spawn(Card, connectionToClient);
-                RpcShowCard(Card, "Dealt");               
-            }
-
-
+        for (int i = 0; i < KartenZiehAnzahl; i++)
+        {
+            GameObject Card = Instantiate(Cards[0], new Vector2(0,0), Quaternion.identity);
+            Cards.RemoveAt(0);
+            NetworkServer.Spawn(Card, connectionToClient);
+            RpcShowCard(Card, "Dealt"); 
+            
+                          
+        }
     }
     public int CardCost = 1;   
     public void PlayCard(GameObject card)
@@ -198,6 +188,8 @@ public class PlayerManager : NetworkBehaviour
             if(hasAuthority)
             {
                 card.transform.SetParent(PlayerHand.transform, false);
+                PlayerManager P = NetworkClient.connection.identity.GetComponent<PlayerManager>();
+                P.cardsDealt++;
             }
             else
             {
@@ -211,9 +203,9 @@ public class PlayerManager : NetworkBehaviour
             {
                if (!Return) 
                {
-                   PlayerManager huso = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-                   huso.Operationen -= huso.CardCost;
-                   card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                  
+                    PlayerManager Huso = NetworkClient.connection.identity.GetComponent<PlayerManager>();
+                    card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                           
+                    Huso.Operationen -= Huso.CardCost;                   
                }
                else 
                {
@@ -229,6 +221,8 @@ public class PlayerManager : NetworkBehaviour
                         card.GetComponent<cardFlipper>().flip();
                         card.transform.SetParent(DropZoneE[dropZoneSuchen].transform, false);                   
                 }
+                
+
                 else
                 {
                     card.transform.SetParent(EnemyHand.transform, true);
@@ -240,6 +234,11 @@ public class PlayerManager : NetworkBehaviour
         }
                
     }
+    void Update()
+    {
+
+    }
+
     //befehlskette Operationen Display
     public void updateOperationenDisplay()
     {
@@ -252,10 +251,28 @@ public class PlayerManager : NetworkBehaviour
     } 
     [ClientRpc]
     public void RpcupdateOperationenDisplay()
-    {
+    {   
         PlayerManager ODisplay= NetworkClient.connection.identity.GetComponent<PlayerManager>();
         Text OperationenText = OperationenAnzeige.GetComponent<Text>();
-        OperationenText.text = ODisplay.Operationen.ToString();
+        OperationenText.text = ODisplay.Operationen.ToString();    
     }
+    public static void Shuffle<T>(List<T> ts)
+    {
+        var count = ts.Count;
+        var last = count - 1;
+        for (int i = 0; i < last; i++)
+        {
+           var r = UnityEngine.Random.Range(i, count);
+           var tmp = ts[i];
+           ts[i] = ts[r];
+           ts[r] = tmp; 
+        }
+    }
+
+    
+    
+        
+    
   
 }
+
