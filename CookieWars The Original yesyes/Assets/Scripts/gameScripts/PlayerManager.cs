@@ -26,6 +26,7 @@ public class PlayerManager : NetworkBehaviour
     public bool Return = false;
     public GameObject endTurnButton;
     public int Operationen = 0;
+    public GameObject OperationenAnzeige;
     
     //Card Variables
     private List<GameObject> Cards = new List<GameObject>();
@@ -69,7 +70,9 @@ public class PlayerManager : NetworkBehaviour
         if(Player.isPlayerTurn)
         {
             Player.Operationen += 4;
+            updateOperationenDisplay();
         }
+        
     }
 
 
@@ -77,7 +80,7 @@ public class PlayerManager : NetworkBehaviour
     {
         base.OnStartClient();
 
-        
+        OperationenAnzeige = GameObject.Find("OperationenAnzeige1");
         
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
@@ -87,23 +90,19 @@ public class PlayerManager : NetworkBehaviour
         DropZoneE.Add(GameObject.Find("EDropZone1"));
         DropZoneE.Add(GameObject.Find("EDropZone2"));
         DropZoneE.Add(GameObject.Find("EDropZone3"));
-
-
-        
-
-
-        
+    
     }
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-
+        
         Shuffle(Cards);
         
         if(isClientOnly)
         {
             isPlayerTurn = true;
             Operationen =4;
+            updateOperationenDisplay();
             
         }
         
@@ -212,6 +211,8 @@ public class PlayerManager : NetworkBehaviour
             {
                if (!Return) 
                {
+                   PlayerManager huso = NetworkClient.connection.identity.GetComponent<PlayerManager>();
+                   huso.Operationen -= huso.CardCost;
                    card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                  
                }
                else 
@@ -228,8 +229,6 @@ public class PlayerManager : NetworkBehaviour
                         card.GetComponent<cardFlipper>().flip();
                         card.transform.SetParent(DropZoneE[dropZoneSuchen].transform, false);                   
                 }
-                
-
                 else
                 {
                     card.transform.SetParent(EnemyHand.transform, true);
@@ -241,9 +240,22 @@ public class PlayerManager : NetworkBehaviour
         }
                
     }
-    void Update()
+    //befehlskette Operationen Display
+    public void updateOperationenDisplay()
     {
-        
+        CmdUpdateOperationenDisplay();
+    }
+    [Command]
+    private void CmdUpdateOperationenDisplay()
+    {
+        RpcupdateOperationenDisplay();
+    } 
+    [ClientRpc]
+    public void RpcupdateOperationenDisplay()
+    {
+        PlayerManager ODisplay= NetworkClient.connection.identity.GetComponent<PlayerManager>();
+        Text OperationenText = OperationenAnzeige.GetComponent<Text>();
+        OperationenText.text = ODisplay.Operationen.ToString();
     }
   
 }

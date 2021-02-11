@@ -81,7 +81,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  card: {fileID: 8082807735156160222, guid: ceff205a7b9344a43b05e0959d03a3fa, type: 3}
+  DoppelKing: {fileID: 8082807735156160222, guid: d1c591a6167d9ba479858e61a3611260,
+    type: 3}
+  Kenedim: {fileID: 8082807735156160222, guid: e018001bc279d944189a236278092f4f, type: 3}
+  PrincessRolle: {fileID: 8082807735156160222, guid: 5793f5273e667f447ae0649336d2344a,
+    type: 3}
+  ESlime: {fileID: 8082807735156160222, guid: 33d8eae0eadf07a4bbdb3724248ca982, type: 3}
+  Elektriker: {fileID: 8082807735156160222, guid: 7f850304c1ab70c4898d8f7f3d87f3a8,
+    type: 3}
+  WaherFox: {fileID: 8082807735156160222, guid: 348f0cb11d259804083e972acb03244c,
+    type: 3}
+  Ratava: {fileID: 8082807735156160222, guid: 1720e28f6d4f5bb47947f55de5426ac7, type: 3}
   PlayerHand: {fileID: 0}
   EnemyHand: {fileID: 0}
   DropZoneP: []
@@ -93,8 +103,7 @@ MonoBehaviour:
   endTurnButton: {fileID: 6393406906069633567, guid: 354796ba3a19d404789bf84096c36451,
     type: 3}
   Operationen: 0
-  OperationenAnzeigePrefab: {fileID: 4532123187937270403, guid: af5e6c4d532d8524faaacd13ad33b901,
-    type: 3}
+  OperationenAnzeige: {fileID: 0}
   isPlayerTurn: 0
   KartenZiehAnzahl: 1
   CardCost: 1
