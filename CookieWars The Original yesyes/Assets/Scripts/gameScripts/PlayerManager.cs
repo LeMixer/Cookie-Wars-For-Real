@@ -7,9 +7,15 @@ using UnityEngine.UI;
 public class PlayerManager : NetworkBehaviour
 
 {
+    public GameObject DoppelKing;
+    public GameObject Kenedim;
+    public GameObject PrincessRolle;
+    public GameObject ESlime;
+    public GameObject Elektriker;
+    public GameObject WaherFox;
+    public GameObject Ratava;
+
     //DragDrop Variables
-    
-    public GameObject card;
     public GameObject PlayerHand;
     public GameObject EnemyHand;
     public List<GameObject> DropZoneP = new List<GameObject>();
@@ -19,18 +25,27 @@ public class PlayerManager : NetworkBehaviour
     public string dropZoneName;
     public bool Return = false;
     public GameObject endTurnButton;
-    
-    //operationen
     public int Operationen = 0;
-    
-    public GameObject OperationenAnzeige;
-    
     
     //Card Variables
     private List<GameObject> Cards = new List<GameObject>();
     
     //Gamelogic Variables
     public bool isPlayerTurn = false;
+
+    //KartenDeck wird festgelegt und gemischt;
+    [Server]
+    public override void OnStartServer()
+    {
+        Cards.Add(Kenedim);
+        Cards.Add(PrincessRolle);
+        Cards.Add(DoppelKing);
+        Cards.Add(Ratava);
+        Cards.Add(WaherFox);
+        Cards.Add(ESlime);
+        Cards.Add(Elektriker);  
+    }
+    
     
     
     public void ChangeTurn()
@@ -54,8 +69,6 @@ public class PlayerManager : NetworkBehaviour
         if(Player.isPlayerTurn)
         {
             Player.Operationen += 4;
-            updateOperationenDisplay();
-            
         }
     }
 
@@ -64,9 +77,8 @@ public class PlayerManager : NetworkBehaviour
     {
         base.OnStartClient();
 
-        OperationenAnzeige = GameObject.Find("OperationenAnzeige1");    
-
-
+        
+        
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
         DropZoneP.Add(GameObject.Find("PDropZone1"));
@@ -78,24 +90,25 @@ public class PlayerManager : NetworkBehaviour
 
 
         
+
+
+        
     }
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
 
+        Shuffle(Cards);
         
         if(isClientOnly)
         {
             isPlayerTurn = true;
             Operationen =4;
-            updateOperationenDisplay(); 
+            
         }
         
   
     }
-
-
-    //DragDrop Kette Search DropZone
     
     
     //DragDrop Kette Search DropZone
@@ -139,13 +152,17 @@ public class PlayerManager : NetworkBehaviour
             Return = true;
         }
     }
-
-    //KartenDeck wird festgelegt und gemischt;
-    [Server]
-    public override void OnStartServer()
+    public static void Shuffle<T>(List<T> TS)
     {
-        Cards.Add(card);
-        
+        var count = TS.Count;
+        var last = count-1;
+        for (var i = 0; i < last; i++)
+        {
+            var R = UnityEngine.Random.Range(i,count);
+            var tmp = TS[i];
+            TS[i] = TS[R];
+            TS[R] = tmp;
+        }
     }
     
     //KartenZiehen button; 
@@ -195,9 +212,7 @@ public class PlayerManager : NetworkBehaviour
             {
                if (!Return) 
                {
-                    PlayerManager Huso = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-                    card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                           
-                    Huso.Operationen -= Huso.CardCost;                   
+                   card.transform.SetParent(DropZoneP[dropZoneSuchen].transform, false);                  
                }
                else 
                {
@@ -228,31 +243,7 @@ public class PlayerManager : NetworkBehaviour
     }
     void Update()
     {
-
-    }
-
-    //befehlskette Operationen Display
-    public void updateOperationenDisplay()
-    {
-        CmdUpdateOperationenDisplay();
-    }
-    [Command]
-    private void CmdUpdateOperationenDisplay()
-    {
-        RpcupdateOperationenDisplay();
-    } 
-    [ClientRpc]
-    public void RpcupdateOperationenDisplay()
-    {   
-        PlayerManager ODisplay= NetworkClient.connection.identity.GetComponent<PlayerManager>();
-        Text OperationenText = OperationenAnzeige.GetComponent<Text>();
-        OperationenText.text = ODisplay.Operationen.ToString();    
-    }
-
-    
-    
         
-    
+    }
   
 }
-

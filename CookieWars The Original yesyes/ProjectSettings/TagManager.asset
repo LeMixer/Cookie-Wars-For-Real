@@ -7,6 +7,7 @@ TagManager:
   - DropZone
   - EDropZone
   - PDropZone
+  - FrontCard
   layers:
   - Default
   - TransparentFX
@@ -43,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: CardMain
+    uniqueID: 1963440245
+    locked: 0
+  - name: Card Symbol
+    uniqueID: 2173450309
     locked: 0
