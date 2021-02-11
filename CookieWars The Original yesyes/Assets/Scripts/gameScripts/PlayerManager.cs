@@ -7,9 +7,15 @@ using UnityEngine.UI;
 public class PlayerManager : NetworkBehaviour
 
 {
+    public GameObject DoppelKing;
+    public GameObject Kenedim;
+    public GameObject PrincessRolle;
+    public GameObject ESlime;
+    public GameObject Elektriker;
+    public GameObject WaherFox;
+    public GameObject Ratava;
+
     //DragDrop Variables
-    
-    public GameObject card;
     public GameObject PlayerHand;
     public GameObject EnemyHand;
     public List<GameObject> DropZoneP = new List<GameObject>();
@@ -26,6 +32,20 @@ public class PlayerManager : NetworkBehaviour
     
     //Gamelogic Variables
     public bool isPlayerTurn = false;
+
+    //KartenDeck wird festgelegt und gemischt;
+    [Server]
+    public override void OnStartServer()
+    {
+        Cards.Add(Kenedim);
+        Cards.Add(PrincessRolle);
+        Cards.Add(DoppelKing);
+        Cards.Add(Ratava);
+        Cards.Add(WaherFox);
+        Cards.Add(ESlime);
+        Cards.Add(Elektriker);  
+    }
+    
     
     
     public void ChangeTurn()
@@ -70,11 +90,16 @@ public class PlayerManager : NetworkBehaviour
 
 
         
+
+
+        
     }
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
 
+        Shuffle(Cards);
+        
         if(isClientOnly)
         {
             isPlayerTurn = true;
@@ -84,9 +109,6 @@ public class PlayerManager : NetworkBehaviour
         
   
     }
-
-
-    //DragDrop Kette Search DropZone
     
     
     //DragDrop Kette Search DropZone
@@ -130,13 +152,17 @@ public class PlayerManager : NetworkBehaviour
             Return = true;
         }
     }
-
-    //KartenDeck wird festgelegt und gemischt;
-    [Server]
-    public override void OnStartServer()
+    public static void Shuffle<T>(List<T> TS)
     {
-        Cards.Add(card);
-        
+        var count = TS.Count;
+        var last = count-1;
+        for (var i = 0; i < last; i++)
+        {
+            var R = UnityEngine.Random.Range(i,count);
+            var tmp = TS[i];
+            TS[i] = TS[R];
+            TS[R] = tmp;
+        }
     }
     
     //KartenZiehen button; 
