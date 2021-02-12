@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class PlayerManager : NetworkBehaviour
 
@@ -88,11 +89,7 @@ public class PlayerManager : NetworkBehaviour
         Cards.Add(Elektriker);    
           
 
-        Shuffle(Cards);
-
-
-         
-        
+        Shuffle(Cards);     
     }
     public override void OnStartLocalPlayer()
     {
@@ -115,7 +112,6 @@ public class PlayerManager : NetworkBehaviour
     public void SearchDropZone(GameObject whichDropzone)
     {        
         CmdSearchCard(whichDropzone);
-
     }
     
     [Command]
@@ -157,16 +153,13 @@ public class PlayerManager : NetworkBehaviour
     public int KartenZiehAnzahl = 1;     
     [Command]
     public void CmdDealCards()
-    {
-        
+    {   
         for (int i = 0; i < KartenZiehAnzahl; i++)
         {
             GameObject Card = Instantiate(Cards[0], new Vector2(0,0), Quaternion.identity);
             Cards.RemoveAt(0);
             NetworkServer.Spawn(Card, connectionToClient);
-            RpcShowCard(Card, "Dealt"); 
-            
-                          
+            RpcShowCard(Card, "Dealt");                    
         }
     }
     public int CardCost = 1;   
@@ -237,19 +230,14 @@ public class PlayerManager : NetworkBehaviour
                 card.transform.SetParent(MainCanvas.transform,true);
                 card.layer = LayerMask.NameToLayer("Zoom");
                 RectTransform rect = card.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(160, 224);
+                rect.sizeDelta = new Vector2(185, 254);
                 
             }
             else
             {
                 card.transform.SetParent(MainCanvas.transform,true);
-                card.layer = LayerMask.NameToLayer("Zoom");
-                RectTransform rect = card.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(160, 224);
             }
-
-        }
-               
+        }           
     }
     void Update()
     {
@@ -291,7 +279,7 @@ public class PlayerManager : NetworkBehaviour
         GameObject zoomedCard = Instantiate(ZoomCard, new Vector2(0,100), Quaternion.identity);
         NetworkServer.Spawn(zoomedCard, connectionToClient);
 
-        RpcShowCard(zoomedCard, "zoom");
+        //RpcShowCard(zoomedCard, "zoom"); 
     }
 
     

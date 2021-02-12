@@ -1018,6 +1018,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  prefabCard: {fileID: 8082807735156160222}
 --- !u!114 &1677378453443310252
 MonoBehaviour:
   m_ObjectHideFlags: 0

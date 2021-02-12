@@ -9,15 +9,12 @@ public class cardZoom : NetworkBehaviour
     private GameObject zoomedCard;
     private float downTime;
     private float timeGesamt;
+    public GameObject prefabCard;
 
     public void OnClickDown()
     {
         PlayerManager = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-        while(Input.GetMouseButtonDown(0)) 
-        {
-            downTime = Time.time;    
-                 
-        }    
+        downTime = Time.time;         
     }
     
     public void OnClickUp()
@@ -26,7 +23,7 @@ public class cardZoom : NetworkBehaviour
         Debug.Log(timeGesamt);
         if(timeGesamt > 2f)
         {
-            PlayerManager.CmdZoomCard(gameObject);
+            PlayerManager.CmdZoomCard(prefabCard);
             Debug.Log(timeGesamt);
         }
     }
