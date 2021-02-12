@@ -1018,8 +1018,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  Canvas: {fileID: 0}
-  zoomCardTemplate: {fileID: 0}
 --- !u!114 &1677378453443310252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1080,6 +1078,21 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1702696548223961308}
           m_MethodName: OnClickDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1702696548223961308}
+          m_MethodName: OnClickUp
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
