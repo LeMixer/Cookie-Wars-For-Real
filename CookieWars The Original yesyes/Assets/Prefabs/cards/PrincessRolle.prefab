@@ -902,6 +902,7 @@ GameObject:
   - component: {fileID: 4424699459335449917}
   - component: {fileID: 140759890932489465}
   - component: {fileID: 768695297871929739}
+  - component: {fileID: -1665725436146108308}
   - component: {fileID: 1677378453443310252}
   - component: {fileID: 4380167495880948357}
   - component: {fileID: 5909944490807819789}
@@ -1003,6 +1004,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardBack: {fileID: 9157476186419274755}
+--- !u!114 &-1665725436146108308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8082807735156160222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 304ba94c342609e47926f61f7997fe91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  Canvas: {fileID: 0}
+  zoomCardTemplate: {fileID: 0}
 --- !u!114 &1677378453443310252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1057,27 +1074,12 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - eventID: 0
+  - eventID: 2
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnHoverEnter
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: OnHoverExit
+        - m_Target: {fileID: -1665725436146108308}
+          m_MethodName: OnClickDown
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

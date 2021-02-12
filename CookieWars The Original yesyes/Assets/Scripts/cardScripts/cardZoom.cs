@@ -1,26 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class cardZoom : MonoBehaviour
+public class cardZoom : NetworkBehaviour
 {
-    public GameObject Canvas;
-    public GameObject zoomCardTemplate;
+    PlayerManager PlayerManager;
     private GameObject zoomedCard;
+    private float time;
 
-
-    public void Awake()
+    public void OnClickDown()
     {
-        Canvas = GameObject.Find("Main Canvas");
-    }
-
-    public void OnHoverEnter()
-    {
-        zoomedCard = Instantiate(gameObject, new Vector2(0,170), Quaternion.identity);
-        zoomedCard.transform.SetParent(Canvas.transform,true);
-        zoomedCard.layer = LayerMask.NameToLayer("Zoom");
-        RectTransform rect = zoomedCard.GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(160, 224);
+        PlayerManager = NetworkClient.connection.identity.GetComponent<PlayerManager>();
+        while(Input.GetMouseButtonDown(0) && time<2f) 
+        {
+            time += Time.deltaTime;
+            Debug.Log(time);
+        }
+        if(time > 2f)
+        {
+            PlayerManager.CmdZoomCard(gameObject);
+        }
+        time = 0f;
         
     }
 

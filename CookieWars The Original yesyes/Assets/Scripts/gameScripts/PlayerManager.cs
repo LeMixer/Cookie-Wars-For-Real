@@ -64,13 +64,13 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
-
+    public GameObject MainCanvas;
     public override void OnStartClient()
     {
         base.OnStartClient();
 
         OperationenAnzeige = GameObject.Find("OperationenAnzeige1");    
-
+        MainCanvas = GameObject.Find("Main Canvas");
         PlayerHand = GameObject.Find("PlayerHand");
         EnemyHand = GameObject.Find("EnemyHand");
         DropZoneP.Add(GameObject.Find("PDropZone1"));
@@ -228,9 +228,26 @@ public class PlayerManager : NetworkBehaviour
                     card.transform.SetParent(EnemyHand.transform, true);
                     Return = false;
                 }
+            }            
+        }
+        if(type == "zoom")
+        {
+            if (hasAuthority)
+            {
+                card.transform.SetParent(MainCanvas.transform,true);
+                card.layer = LayerMask.NameToLayer("Zoom");
+                RectTransform rect = card.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(160, 224);
+                
+            }
+            else
+            {
+                card.transform.SetParent(MainCanvas.transform,true);
+                card.layer = LayerMask.NameToLayer("Zoom");
+                RectTransform rect = card.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(160, 224);
             }
 
-            
         }
                
     }
@@ -267,6 +284,14 @@ public class PlayerManager : NetworkBehaviour
            ts[i] = ts[r];
            ts[r] = tmp; 
         }
+    }
+    [Command]
+    public void CmdZoomCard(GameObject ZoomCard)
+    {
+        GameObject zoomedCard = Instantiate(ZoomCard, new Vector2(0,100), Quaternion.identity);
+        NetworkServer.Spawn(zoomedCard, connectionToClient);
+
+        RpcShowCard(zoomedCard, "zoom");
     }
 
     
