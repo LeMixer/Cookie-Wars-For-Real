@@ -14,20 +14,23 @@ public class cardZoom : NetworkBehaviour
     public void OnClickDown()
     {
         PlayerManager = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-        downTime = Time.time;         
+        downTime = Time.time;  
+        timeGesamt = Time.time - downTime;
+        while(timeGesamt < 2)
+        {
+           OnClickUp(timeGesamt);
+        }
+
     }
     
-    public void OnClickUp()
+    public void OnClickUp(float _timeGesamt)
     {
-        timeGesamt = Time.time - downTime;
-        Debug.Log(timeGesamt);
         if(timeGesamt > 2f)
         {
-            GameObject ZoomInstance = Instantiate(prefabCard, transform.position, Quaternion.identity);
+            GameObject Canvas = GameObject.Find("Main Canvas");
+            GameObject ZoomInstance = Instantiate(prefabCard, new Vector2(0, 90), Quaternion.identity);
             ZoomInstance.GetComponent<DisplayCard>().Karte = gameObject.GetComponent<DisplayCard>().Karte;
-
-            PlayerManager.CmdZoomCard(ZoomInstance);
-            Debug.Log(timeGesamt);
+            ZoomInstance.transform.SetParent(Canvas.transform, false);
         }
     }
 
@@ -35,4 +38,5 @@ public class cardZoom : NetworkBehaviour
     {
         Destroy(zoomedCard);
     }
+   
 }
