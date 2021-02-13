@@ -16,17 +16,16 @@ public class cardZoom : MonoBehaviour
     {
         spawnedZoom = false;
         downTime = Time.time;     
-        while(timeGesamt < 2 && Input.GetMouseButtonDown(0))
-        {
-            spawnZoomMethod();
-        }
+        spawnZoomMethod();
+        
 
     }
     
     public void spawnZoomMethod()
     {   
-        timeGesamt = Time.time - downTime;
-        if(timeGesamt > 2f && !spawnedZoom)
+        timeGesamt = 2f;
+
+        if(timeGesamt >= 2f && !spawnedZoom)
         {
             GameObject Canvas = GameObject.Find("Main Canvas");
             GameObject ZoomInstance = Instantiate(prefabCard, new Vector2(0, 90), Quaternion.identity);
