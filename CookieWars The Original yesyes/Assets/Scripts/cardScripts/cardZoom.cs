@@ -1,37 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class cardZoom : NetworkBehaviour
+
+public class cardZoom : MonoBehaviour
 {
     PlayerManager PlayerManager;
     private GameObject zoomedCard;
     private float downTime;
     private float timeGesamt;
     public GameObject prefabCard;
+    private bool spawnedZoom = false;
 
     public void OnClickDown()
     {
-        PlayerManager = NetworkClient.connection.identity.GetComponent<PlayerManager>();
-        downTime = Time.time;  
-        timeGesamt = Time.time - downTime;
-        while(timeGesamt < 2)
+        spawnedZoom = false;
+        downTime = Time.time;     
+        while(timeGesamt < 2 && Input.GetMouseButtonDown(0))
         {
-           OnClickUp(timeGesamt);
+            spawnZoomMethod();
         }
 
     }
     
-    public void OnClickUp(float _timeGesamt)
-    {
-        if(timeGesamt > 2f)
+    public void spawnZoomMethod()
+    {   
+        timeGesamt = Time.time - downTime;
+        if(timeGesamt > 2f && !spawnedZoom)
         {
             GameObject Canvas = GameObject.Find("Main Canvas");
             GameObject ZoomInstance = Instantiate(prefabCard, new Vector2(0, 90), Quaternion.identity);
             ZoomInstance.GetComponent<DisplayCard>().Karte = gameObject.GetComponent<DisplayCard>().Karte;
             ZoomInstance.transform.SetParent(Canvas.transform, false);
+            spawnedZoom = true;
+            downTime = 0f;
         }
+        
     }
 
     public void OnHoverExit() 
