@@ -23,7 +23,10 @@ public class cardZoom : NetworkBehaviour
         Debug.Log(timeGesamt);
         if(timeGesamt > 2f)
         {
-            PlayerManager.CmdZoomCard(prefabCard);
+            GameObject ZoomInstance = Instantiate(prefabCard, transform.position, Quaternion.identity);
+            ZoomInstance.GetComponent<DisplayCard>().Karte = gameObject.GetComponent<DisplayCard>().Karte;
+
+            PlayerManager.CmdZoomCard(ZoomInstance);
             Debug.Log(timeGesamt);
         }
     }

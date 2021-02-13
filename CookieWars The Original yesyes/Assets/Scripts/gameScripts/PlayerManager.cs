@@ -276,9 +276,7 @@ public class PlayerManager : NetworkBehaviour
     [Command]
     public void CmdZoomCard(GameObject ZoomCard)
     {
-        GameObject zoomedCard = Instantiate(ZoomCard, new Vector2(0,100), Quaternion.identity);
-        NetworkServer.Spawn(zoomedCard, connectionToClient);
-
+        NetworkServer.Spawn(ZoomCard, connectionToClient);
         //RpcShowCard(zoomedCard, "zoom"); 
     }
 
